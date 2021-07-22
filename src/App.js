@@ -14,7 +14,7 @@ const initialState = [
 ]
 
 export const App = () => {
-    const [todoList, setTodoList] = useState(initialState)
+    const [todoList, setTodoList] = useState([])
     const [loading, setLoading] = useState(true)
 
 
