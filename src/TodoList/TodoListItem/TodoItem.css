@@ -1,3 +1,30 @@
-.todoList__item  ul {
-    list-style: none;
+.todo__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(56, 54, 54, 0.5);
+    border-radius: 6px;
+    background-color: rgba(237, 245, 245, 0.14);
+    padding: 15px 10px;
+    margin-top: 10px;
+}
+
+.todo__item input {
+    margin-right: 10px;
+}
+
+.todo__item button {
+    background-color: rgba(252, 0, 0, 0.50);
+    border-radius: 5px;
+    border: none;
+    color: #ffffff;
+    padding: 5px;
+}
+
+.todo__item strong {
+    margin-right: 5px;
+}
+
+.todo__item_done {
+    text-decoration: line-through;
 }
