@@ -1,40 +1,53 @@
 import React, {useEffect, useState} from 'react'
-import TodoList from "./TodoList/TodoList";
 import './App.css'
 import Context from "./context";
-import AddTodo from "./TodoList/AddTodo/AddTodo";
 import {Preloader} from "./Preloader/Preloader";
+import Header from "./TodoList/Header/Header";
+import {array} from "prop-types";
+
+
+const TodoList = React.lazy(() => import ("./TodoList/TodoList"))
+const AddTodo = React.lazy(() => import ("./TodoList/AddTodo/AddTodo"))
+const SearchForm = React.lazy(() => import ("./TodoList/SearchForm/SearchForm"))
+const ItemStatus = React.lazy(() => import ("./TodoList/ItemStatus/ItemStatus"))
 
 const initialState = [
-    {id: 1, completed: false, title: 'купить молочко'},
-    {id: 2, completed: false, title: 'купить хлебушек'},
-    {id: 3, completed: false, title: 'купить чипсики'},
-    {id: 4, completed: false, title: 'купить печеньки'},
+    {id: 1, completed: false, important: false, title: 'Купить молочко'},
+    {id: 2, completed: false, important: false, title: 'Купить хлебушек'},
+    {id: 3, completed: false, important: false, title: 'Купить чипсики'},
+    {id: 4, completed: false, important: false, title: 'Купить печеньки'},
+    {id: 5, completed: false, important: false, title: 'Басюша - лучшая кисюша'},
 
 ]
 
 export const App = () => {
-    const [todoList, setTodoList] = useState([])
-    const [loading, setLoading] = useState(true)
-
+    const [todoList, setTodoList] = useState(initialState)
+    const [filteredTodoList, setFilteredTodoList] = useState(todoList)
+    const [searchText, setSearchText] = useState('')
+    const [status, setStatus] = useState('all')
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
-            .then(response => response.json())
-            .then(todos => {
-                setTodoList(todos)
-                setLoading(false)
-            })
-    }, [])
+        const filteredBySearchText = filterBySearchText(todoList)
+        const filteredByStatus = filterByStatus(filteredBySearchText)
 
+        setFilteredTodoList(filteredByStatus)
+    }, [todoList,searchText, status])
 
-
-    function toggleTodo(id) {
-        setTodoList(todoList.map(todoItem => {
-            if (todoItem.id === id) {
-                todoItem.completed = !todoItem.completed
+    function toggleTodoChecked(id) {
+        setTodoList(todoList.map(item => {
+            if (item.id === id) {
+                item.completed = !item.completed
             }
-            return todoItem
+            return item
+        }))
+    }
+
+    function onMarkImportant(id) {
+        setTodoList(todoList.map(item => {
+            if (item.id === id) {
+                item.important = !item.important
+            }
+            return item
         }))
     }
 
@@ -48,17 +61,34 @@ export const App = () => {
         ]))
     }
 
+    function filterBySearchText (array) {
+        return array.filter((item) => item.title.toLowerCase().indexOf(searchText.trim()) !== -1)
+    }
+
+    function filterByStatus(array) {
+        switch (status) {
+            case 'done':
+                return array.filter((item) => item.completed)
+            case 'important':
+                return array.filter((item) => item.important)
+            case 'inProgress':
+                return array.filter((item) => !item.completed)
+            default:
+                return array
+        }
+    }
+
     return (
         <Context.Provider value={{removeTodo}}>
             <div className='wrapper'>
-                <h1>Todo List</h1>
-                <AddTodo createTodo={createTodo}/>
-                {loading && <Preloader />}
-                {todoList.length
-                    ? <TodoList todos={todoList} toggleTodo={toggleTodo}/>
-                    : loading ? null : (<p>No todos :( </p>)
-                }
-
+                <Header/>
+                <React.Suspense fallback={<Preloader/>}>
+                    <SearchForm searchText={searchText} setSearchText={setSearchText}/>
+                    <ItemStatus setStatus={setStatus}/>
+                    <TodoList todos={filteredTodoList} toggleTodoChecked={toggleTodoChecked}
+                              onMarkImportant={onMarkImportant}/>
+                    <AddTodo createTodo={createTodo}/>
+                </React.Suspense>
             </div>
         </Context.Provider>
     )

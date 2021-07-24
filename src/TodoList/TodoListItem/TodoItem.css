@@ -4,27 +4,23 @@
     align-items: center;
     border: 1px solid rgba(56, 54, 54, 0.5);
     border-radius: 6px;
-    background-color: rgba(237, 245, 245, 0.14);
-    padding: 15px 10px;
+    background-color: #bbbec91f;
+    padding: 15px 10px 15px 25px;
     margin-top: 10px;
 }
-
-.todo__item input {
-    margin-right: 10px;
+.todo__item span {
+    color: #000000;
 }
-
 .todo__item button {
-    background-color: rgba(252, 0, 0, 0.50);
-    border-radius: 5px;
-    border: none;
-    color: #ffffff;
-    padding: 5px;
-}
-
-.todo__item strong {
-    margin-right: 5px;
+    margin-left: 10px;
 }
 
 .todo__item_done {
     text-decoration: line-through;
+}
+
+.todo__item_important {
+    font-weight:700;
+
+
 }

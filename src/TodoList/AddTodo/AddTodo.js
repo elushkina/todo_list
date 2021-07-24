@@ -14,12 +14,17 @@ const AddTodo = ({createTodo}) => {
         }
     }
     return (
+
         <form className='addTodo' onSubmit={submitHandler}>
-            <input type='text' value={value} onChange={(event) => {
+            <input type='text'  placeholder='Add new to do' value={value} onChange={(event) => {
                 return setValue(event.target.value)
             }}/>
-            <button type='submit'>Add todo</button>
+            <button className="btn waves-effect waves-light" type="submit" name="action">
+                <i className="material-icons left">add</i> Add
+
+            </button>
         </form>
+
     )
 }
 

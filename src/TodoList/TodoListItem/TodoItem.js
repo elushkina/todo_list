@@ -1,20 +1,33 @@
-import {React, useContext }from 'react'
+import React, {useContext} from 'react'
 import PropTypes from 'prop-types'
 import './TodoItem.css'
 import Context from "../../context";
 
-const TodoItem = ({todoItem, index, toggleTodo}) => {
-    const {removeTodo} =useContext(Context)
+const TodoItem = ({todoItem, index, toggleTodoChecked, onMarkImportant}) => {
+    const {removeTodo} = useContext(Context)
+    let classNames = ''
+    if (todoItem.completed) {
+        classNames += ' todo__item_done'
+    }
+    if (todoItem.important) {
+        classNames += ' todo__item_important'
+    }
+
     return (
         <li className='todo__item'>
-            <span className={todoItem.completed ? 'todo__item_done': ''}>
-                <input type='checkbox' checked={todoItem.completed}
-                       onChange={() => toggleTodo(todoItem.id)}
-                />
-            <strong>{index + 1}</strong>
-                {todoItem.title}
-            </span>
-            <button onClick={() => removeTodo(todoItem.id)}>Удалить</button>
+            <p>
+                <label>
+                    <input type="checkbox" checked={todoItem.completed} onChange={() => toggleTodoChecked(todoItem.id)}/>
+                    <span className={classNames}>{index + 1}  {todoItem.title} </span>
+                </label>
+            </p>
+
+            <div>
+                <button onClick={() => onMarkImportant(todoItem.id)} className="waves-effect blue cyan accent-4 btn">
+                    <i className="material-icons ">priority_high</i></button>
+                <button onClick={() => removeTodo(todoItem.id)} className="waves-effect red btn">
+                    <i className="material-icons ">delete</i></button>
+            </div>
         </li>
 
     )
@@ -23,7 +36,7 @@ const TodoItem = ({todoItem, index, toggleTodo}) => {
 TodoItem.propTypes = {
     todoItem: PropTypes.object.isRequired,
     index: PropTypes.number,
-    toggleTodo: PropTypes.func.isRequired
+    toggleTodoChecked: PropTypes.func.isRequired
 }
 
 export default TodoItem

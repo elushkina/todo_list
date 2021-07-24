@@ -11,7 +11,8 @@ const TodoList = (props) => {
                 <ul>
                     {props.todos.map((todoItem, index) => {
                         return <TodoItem key={todoItem.id} index={index}
-                                         todoItem={todoItem} toggleTodo={props.toggleTodo}/>
+                                         todoItem={todoItem} toggleTodoChecked={props.toggleTodoChecked}
+                                         onMarkImportant={props.onMarkImportant}/>
                     })}</ul>
             </div>
         </div>
@@ -20,7 +21,7 @@ const TodoList = (props) => {
 
 TodoList.propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-    toggleTodo: PropTypes.func.isRequired
+    toggleTodoChecked: PropTypes.func.isRequired
 }
 
 export default TodoList
