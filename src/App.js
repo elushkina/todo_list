@@ -3,8 +3,6 @@ import './App.css'
 import Context from "./context";
 import {Preloader} from "./Preloader/Preloader";
 import Header from "./TodoList/Header/Header";
-import {array} from "prop-types";
-
 
 const TodoList = React.lazy(() => import ("./TodoList/TodoList"))
 const AddTodo = React.lazy(() => import ("./TodoList/AddTodo/AddTodo"))
@@ -83,8 +81,9 @@ export const App = () => {
             <div className='wrapper'>
                 <Header/>
                 <React.Suspense fallback={<Preloader/>}>
+                    {todoList.length > 0 ? <>
                     <SearchForm searchText={searchText} setSearchText={setSearchText}/>
-                    <ItemStatus setStatus={setStatus}/>
+                    <ItemStatus setStatus={setStatus}/></> : <h2>No todos :( </h2>}
                     <TodoList todos={filteredTodoList} toggleTodoChecked={toggleTodoChecked}
                               onMarkImportant={onMarkImportant}/>
                     <AddTodo createTodo={createTodo}/>
